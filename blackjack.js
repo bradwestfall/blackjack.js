@@ -2,6 +2,8 @@
  * Blackjack.js by Brad Westfall
  */
 
+'use strict';
+
 
 /****************************************
   Settings
@@ -293,10 +295,20 @@ var blackjack = {};
             }
 
             this.showCards();
+
+            pubsub.publish('idle', {
+                player: this.player,
+                dealer: [this.dealer[0]]
+            });
+
         },
 
         // Player Bust
         playerBust: function() {
+
+            // Publish
+            pubsub.publish('bust');
+
             this.playerLose();
         },
 
@@ -370,6 +382,7 @@ var blackjack = {};
         playerPush: function() {
             blackjack.bank.add(this.bet);
             blackjack.util.report('Push', 'white', 'blue');
+            this.showCards(true);
             this.endGame();
 
             // Publish
@@ -382,10 +395,12 @@ var blackjack = {};
             blackjack.util.report('Lose', 'white', 'red');
             this.showCards(true);
             blackjack.bank.report();
+            var bet = this.bet;
             this.endGame();
 
             // Lose
-            pubsub.publish('lose', this.bet);
+
+            pubsub.publish('lose', bet);
 
         },
 
