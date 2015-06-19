@@ -1,6 +1,8 @@
 /**
  * Blackjack.js (c) by Brad Westfall
- * Player Personna: This player bets $5 all the time, no matter what
+ * Player Personna: This player doubles their bet every time they lose in hopes
+ * of gaining back their losses when they eventually win. When they do win, they
+ * start over at $5 per bet.
  */
 
 'use strict';
@@ -9,10 +11,10 @@ var autoPlay = {};
 
 (function(autoPlay) {
 
-    autoPlay.startingAmount = 500;
+    autoPlay.startingAmount = 200;
     autoPlay.defaultBet = 15;
     autoPlay.recentBet = 5;
-    autoPlay.speed = 500;
+    autoPlay.speed = 50;
     autoPlay.games = 0;
     autoPlay.playOnLoad = true;
 
@@ -47,7 +49,8 @@ var autoPlay = {};
             blackjack.util.report('win: ' + amount);
 
             setTimeout(function() {
-                play(this.defaultBet);
+                this.recentBet = this.defaultBet;
+                play(this.recentBet);
             }, autoPlay.speed);
 
         });
@@ -57,7 +60,7 @@ var autoPlay = {};
             blackjack.util.report('push');
 
             setTimeout(function() {
-                play(this.defaultBet);
+                play(this.recentBet);
             }, autoPlay.speed);
 
         });
@@ -67,7 +70,23 @@ var autoPlay = {};
             blackjack.util.report('lose: ' + amount);
 
             setTimeout(function() {
-                play(this.defaultBet);
+                
+                // This is the progressive part
+                var doubledBet = parseInt(amount) * 2;
+
+                if (blackjack.bank.amount < 5) {
+                    console.clear();
+                    blackjack.util.warn('Bankrupt :(');
+                    statistics.report();
+                    return;
+                } else if (blackjack.bank.amount < doubledBet) {
+                    doubledBet = blackjack.bank.amount;
+                }
+
+                // Play
+                this.recentBet = doubledBet;
+                play(doubledBet);
+
             }, autoPlay.speed);
 
         });

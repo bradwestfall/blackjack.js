@@ -1,5 +1,5 @@
 /**
- * Blackjack.js by Brad Westfall
+ * Blackjack.js (c) by Brad Westfall
  */
 
 'use strict';
@@ -10,10 +10,11 @@
 *****************************************/
 
 var settings = {
-    startingAmount: 200,
+    startingAmount: 500,
     defaultBet: 5,
     decks: 6,
-    clearOnStart: true
+    clearOnStart: true,
+    consoleLog: true
 }
 
 
@@ -113,6 +114,7 @@ var blackjack = {};
 
         // Report to console with pretty colors
         report: function(message, color, bg) {
+            if (!settings.consoleLog) return;
             if (color == undefined) color = 'black';
             if (bg == undefined) bg = 'white';
             console.log('%c ' + message + ' ', 'color:' + color + '; background-color:'+bg);

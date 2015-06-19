@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) Addy Osmani 2015 - http://addyosmani.com/resources/essentialjsdesignpatterns/book/
+ */
+
 var pubsub = {};
  
 (function(myObject) {
@@ -22,7 +26,7 @@ var pubsub = {};
             len = subscribers ? subscribers.length : 0;
  
         while (len--) {
-            subscribers[len].func( args );
+            subscribers[len].func( topic, args );
         }
  
         return this;
