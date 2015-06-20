@@ -1,5 +1,5 @@
 /**
- * Blackjack.js (c) by Brad Westfall
+ * Blackjack.js (c) Brad Westfall @bradwestfall
  */
 
 'use strict';
@@ -156,9 +156,11 @@ var blackjack = {};
      * Bank
      */
     blackjack.bank = {
+        recentBet: 0,
         amount: settings.startingAmount,
         bet: function(amount) {
             this.amount -= amount;
+            this.recentBet = amount;
             return amount;
         },
         add: function(amount) {
@@ -373,10 +375,10 @@ var blackjack = {};
             this.showCards(true);
             blackjack.bank.add(winnings);
             blackjack.bank.report();
-            this.endGame();
 
             // Publish
             pubsub.publish('win', winnings);
+            this.endGame();
 
         },
 
@@ -385,10 +387,10 @@ var blackjack = {};
             blackjack.bank.add(this.bet);
             blackjack.util.report('Push', 'white', 'blue');
             this.showCards(true);
-            this.endGame();
 
             // Publish
             pubsub.publish('push');
+            this.endGame();
 
         },
 
@@ -398,24 +400,26 @@ var blackjack = {};
             this.showCards(true);
             blackjack.bank.report();
             var bet = this.bet;
-            this.endGame();
 
             // Lose
-
             pubsub.publish('lose', bet);
+            this.endGame();
 
         },
 
         // End Game
         endGame: function() {
-            this.inPlay = false;
-            this.player = [];
-            this.dealer = [];
-            this.bet = 0;
 
             // Publish
             pubsub.publish('endgame');
 
+            // Output bank amount
+            document.querySelector('.bank .amount').innerHTML = '$' + blackjack.bank.amount;
+
+            this.inPlay = false;
+            this.player = [];
+            this.dealer = [];
+            this.bet = 0;
         }
 
     }

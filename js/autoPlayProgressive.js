@@ -1,5 +1,5 @@
 /**
- * Blackjack.js (c) by Brad Westfall
+ * Blackjack.js (c) Brad Westfall @bradwestfall
  * Player Personna: This player doubles their bet every time they lose in hopes
  * of gaining back their losses when they eventually win. When they do win, they
  * start over at $5 per bet.
@@ -11,64 +11,63 @@ var autoPlay = {};
 
 (function(autoPlay) {
 
-    autoPlay.startingAmount = 200;
-    autoPlay.defaultBet = 15;
-    autoPlay.recentBet = 5;
-    autoPlay.speed = 50;
-    autoPlay.games = 0;
+    autoPlay.startingAmount = 1000;
+    autoPlay.defaultBet = 5;
+    autoPlay.speed = 5;
     autoPlay.playOnLoad = true;
 
-    autoPlay.hitOrStay = function(playerCount, dealerShowing) {
+    autoPlay.hitOrStay = function(playerHand, dealerShowing) {
 
-        // Get the move from "the book" as they say
-        var move = book.hitOrStay(playerCount, dealerShowing);
-
-        if (move.toUpperCase() == 'H') {
+        var playerCount = blackjack.util.count(playerHand);
+        var dealerCount = blackjack.util.count(dealerShowing)
+        
+        // Soft hand cant lose on hit
+        if (playerCount < 17 && playerHand.indexOf('A') > 0) {
             blackjack.util.report('Hit');
             blackjack.hand.hit();
-        } else if (move.toUpperCase() == 'S') {
-            blackjack.util.report('Stay');
-            blackjack.hand.stay();
+        } else {
+
+            // Get the move from "the book" as they say
+            var move = book.hitOrStay(playerCount, dealerCount);
+
+            if (move.toUpperCase() == 'H') {
+                blackjack.util.report('Hit');
+                blackjack.hand.hit();
+            } else if (move.toUpperCase() == 'S') {
+                blackjack.util.report('Stay');
+                blackjack.hand.stay();
+            }
+            
         }
 
     }
 
     autoPlay.init = function() {
+        var defaultBet = this.defaultBet;
 
         // When Idle
         pubsub.subscribe('idle', function(t, cards) {
-
             setTimeout(function() {
-                autoPlay.hitOrStay(blackjack.util.count(cards.player), blackjack.util.count(cards.dealer));
+                autoPlay.hitOrStay(cards.player, cards.dealer);
             }, autoPlay.speed);
-
         });
 
         // Account for player wins
         pubsub.subscribe('win', function(t, amount) {
-            blackjack.util.report('win: ' + amount);
-
             setTimeout(function() {
-                this.recentBet = this.defaultBet;
-                play(this.recentBet);
+                play(defaultBet);
             }, autoPlay.speed);
-
         });
 
         // Account for player pushes
         pubsub.subscribe('push', function() {
-            blackjack.util.report('push');
-
             setTimeout(function() {
-                play(this.recentBet);
+                play(blackjack.bank.recentBet);
             }, autoPlay.speed);
-
         });
 
         // Account for player lose
         pubsub.subscribe('lose', function(t, amount) {
-            blackjack.util.report('lose: ' + amount);
-
             setTimeout(function() {
                 
                 // This is the progressive part
@@ -84,16 +83,14 @@ var autoPlay = {};
                 }
 
                 // Play
-                this.recentBet = doubledBet;
                 play(doubledBet);
 
             }, autoPlay.speed);
-
         });
 
         // Start first Hand
         blackjack.bank.amount = this.startingAmount;
-        if (this.playOnLoad) play(5);
+        if (this.playOnLoad) play(defaultBet);
 
     }
 

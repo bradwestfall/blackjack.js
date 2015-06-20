@@ -1,5 +1,5 @@
 /**
- * Blackjack.js (c) by Brad Westfall
+ * Blackjack.js (c) Brad Westfall @bradwestfall
  * Book is meant to resemble http://www.casinowatchdogs.com/images/PerfectBlackjack.gif
  * However some mods were made because blackjack.js curently doesn't support splits, double downs, etc.
  */
@@ -32,11 +32,11 @@ var book = {};
         book[10]     = [,,'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'];
         book[11]     = [,,'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'];
   
-        book[12]     = [,,'H', 'H', 'S', 'S', 'S', 'H', 'H', 'H', 'H', 'H'];
-        book[13]     = [,,'S', 'S', 'S', 'S', 'S', 'H', 'H', 'H', 'H', 'H'];
-        book[14]     = [,,'S', 'S', 'S', 'S', 'S', 'H', 'H', 'H', 'H', 'H'];
-        book[15]     = [,,'S', 'S', 'S', 'S', 'S', 'H', 'H', 'H', 'H', 'H'];
-        book[16]     = [,,'S', 'S', 'S', 'S', 'S', 'H', 'H', 'H', 'H', 'H'];
+        book[12]     = [,,'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'];
+        book[13]     = [,,'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'];
+        book[14]     = [,,'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'];
+        book[15]     = [,,'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'];
+        book[16]     = [,,'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'];
   
         book[17]     = [,,'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'];
         book[18]     = [,,'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'];
