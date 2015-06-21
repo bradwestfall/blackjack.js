@@ -4,7 +4,7 @@ Play blackjack in the console
 
 ![Screenshot](screenshot.png)
 
-## Blackjack algo
+## Gameplay
 
 Settings are easy to change, but currently:
 

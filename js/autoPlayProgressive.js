@@ -11,10 +11,9 @@ var autoPlay = {};
 
 (function(autoPlay) {
 
-    autoPlay.startingAmount = 1000;
     autoPlay.defaultBet = 5;
     autoPlay.speed = 5;
-    autoPlay.playOnLoad = true;
+    autoPlay.on = false;
 
     autoPlay.hitOrStay = function(playerHand, dealerShowing) {
 
@@ -47,50 +46,71 @@ var autoPlay = {};
 
         // When Idle
         pubsub.subscribe('idle', function(t, cards) {
-            setTimeout(function() {
-                autoPlay.hitOrStay(cards.player, cards.dealer);
-            }, autoPlay.speed);
+            if (autoPlay.on) {
+                setTimeout(function() {
+                    autoPlay.hitOrStay(cards.player, cards.dealer);
+                }, autoPlay.speed);
+            }
         });
 
         // Account for player wins
         pubsub.subscribe('win', function(t, amount) {
-            setTimeout(function() {
-                play(defaultBet);
-            }, autoPlay.speed);
+            if (autoPlay.on) {
+                setTimeout(function() {
+                    play(defaultBet);
+                }, autoPlay.speed);
+            }
         });
 
         // Account for player pushes
         pubsub.subscribe('push', function() {
-            setTimeout(function() {
-                play(blackjack.bank.recentBet);
-            }, autoPlay.speed);
+            if (autoPlay.on) {
+                setTimeout(function() {
+                    play(blackjack.bank.recentBet);
+                }, autoPlay.speed);
+            }
         });
 
         // Account for player lose
         pubsub.subscribe('lose', function(t, amount) {
-            setTimeout(function() {
-                
-                // This is the progressive part
-                var doubledBet = parseInt(amount) * 2;
+            if (autoPlay.on) {
+                setTimeout(function() {
+                    
+                    // This is the progressive part
+                    var doubledBet = parseInt(amount) * 2;
 
-                if (blackjack.bank.amount < 5) {
-                    console.clear();
-                    blackjack.util.warn('Bankrupt :(');
-                    statistics.report();
-                    return;
-                } else if (blackjack.bank.amount < doubledBet) {
-                    doubledBet = blackjack.bank.amount;
-                }
+                    if (blackjack.bank.amount < 5) {
+                        console.clear();
+                        blackjack.util.warn('Bankrupt :(');
+                        statistics.report();
+                        return;
+                    } else if (blackjack.bank.amount < doubledBet) {
+                        doubledBet = blackjack.bank.amount;
+                    }
 
-                // Play
-                play(doubledBet);
+                    // Play
+                    play(doubledBet);
 
-            }, autoPlay.speed);
+                }, autoPlay.speed);
+            }
         });
 
-        // Start first Hand
-        blackjack.bank.amount = this.startingAmount;
-        if (this.playOnLoad) play(defaultBet);
+        /**
+         * DOM Events
+         */
+
+        document.querySelector('.autoplay.start').onclick = function() {
+            if (!blackjack.hand.inPlay) {
+                autoPlay.on = true;
+                play(autoPlay.defaultBet);
+            } else {
+                console.log('Autoplay can only be turned on when your current game is over');
+            }            
+        }
+
+        document.querySelector('.autoplay.stop').onclick = function() {
+            autoPlay.on = false;
+        }
 
     }
 

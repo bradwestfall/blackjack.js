@@ -10,7 +10,7 @@
 *****************************************/
 
 var settings = {
-    startingAmount: 500,
+    startingAmount: 1000,
     defaultBet: 5,
     decks: 6,
     clearOnStart: true,
@@ -167,6 +167,7 @@ var blackjack = {};
             this.amount += amount;
         },
         report: function() {
+            document.querySelector('.bank').innerHTML = '$' + blackjack.bank.amount;
             console.log('%cBank: ' + this.amount, 'color: green');
         }
     }
@@ -413,9 +414,6 @@ var blackjack = {};
             // Publish
             pubsub.publish('endgame');
 
-            // Output bank amount
-            document.querySelector('.bank .amount').innerHTML = '$' + blackjack.bank.amount;
-
             this.inPlay = false;
             this.player = [];
             this.dealer = [];
@@ -425,9 +423,6 @@ var blackjack = {};
     }
 
 })(blackjack);
-
-// Initial Message
-blackjack.util.report('Start by typing play()');
 
 /**
  * Console Shortcuts
@@ -449,3 +444,10 @@ var stay = function() {
 var bank = function() {
     blackjack.bank.report();
 }
+
+/**
+ * Initial Console Messages
+ */
+
+blackjack.bank.report();
+blackjack.util.report('Start by typing play()');

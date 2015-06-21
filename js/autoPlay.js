@@ -9,10 +9,9 @@ var autoPlay = {};
 
 (function(autoPlay) {
 
-    autoPlay.startingAmount = 1000;
     autoPlay.defaultBet = 5;
     autoPlay.speed = 0;
-    autoPlay.playOnLoad = true;
+    autoPlay.on = false;
 
     autoPlay.hitOrStay = function(playerHand, dealerShowing) {
 
@@ -79,9 +78,22 @@ var autoPlay = {};
             }, autoPlay.speed);
         });
 
-        // Start first Hand
-        blackjack.bank.amount = this.startingAmount;
-        if (this.playOnLoad) play(defaultBet);
+        /**
+         * DOM Events
+         */
+
+        document.querySelector('.autoplay.start').onclick = function() {
+            if (!blackjack.hand.inPlay) {
+                autoPlay.on = true;
+                play(autoPlay.defaultBet);
+            } else {
+                console.log('Autoplay can only be turned on when your current game is over');
+            }            
+        }
+
+        document.querySelector('.autoplay.stop').onclick = function() {
+            autoPlay.on = false;
+        }
 
     }
 

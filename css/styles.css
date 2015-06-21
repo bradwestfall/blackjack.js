@@ -1,13 +1,10 @@
 .bank {
+    min-width: 200px;
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    padding: 10px;
     background-color: #333;
     color: #ddd;
-    padding: 10px;
-    position: absolute;
-    top: 1em;
-    right: 1em;
-    min-width: 200px;
-}
-
-.bank .amount {
     font-size: 4em;
 }

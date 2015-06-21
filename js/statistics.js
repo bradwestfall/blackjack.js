@@ -18,8 +18,6 @@ var statistics = {};
     statistics.currentGame = {};
     statistics.games = [];
 
-    // Need to track win streak and lose streak
-
     statistics.report = function() {
         // Show recent 1000 games
         console.table(this.games.slice(-1000));
