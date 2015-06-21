@@ -14,7 +14,7 @@ Settings are easy to change, but currently:
 
 ## Manual Play
 
-Use quick function calls `play()`, `hit()`, and `stay()` to play the game 
+Use quick function calls `play()`, `hit()`, and `stay()` to play the game. Also the official way to restart is to refresh :)
 
 ## Program an Autoplayer
 
