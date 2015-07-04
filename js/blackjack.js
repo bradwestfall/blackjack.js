@@ -168,7 +168,7 @@ var blackjack = {};
         },
         report: function() {
             document.querySelector('.bank').innerHTML = '$' + blackjack.bank.amount;
-            console.log('%cBank: ' + this.amount, 'color: green');
+            blackjack.util.report('Bank: ' + this.amount, 'green');
         }
     }
 
